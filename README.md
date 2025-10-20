@@ -1,9 +1,4 @@
-Excellent — here’s a **formal, publication-quality README.md** tailored specifically for your **dissertation project**.
-It reads like a professional research repository (similar to a master’s thesis supplement hosted on GitHub) and avoids any coursework tone or “demo” phrasing.
 
----
-
-```markdown
 # 📈 CEEMD–CNN–LSTM–PPO: A Hybrid Deep Learning Framework for Equity Forecasting and Trading  
 
 This repository accompanies the dissertation  
