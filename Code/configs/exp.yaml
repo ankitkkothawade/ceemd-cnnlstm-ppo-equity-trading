@@ -1,0 +1,43 @@
+global:
+  tickers: ["AAPL", "JPM", "AMZN", "TSLA", "MSFT"]
+  start: "2000-01-01"
+  end:   "2025-01-01"
+  train_end_y: 2022           # test begins 2023+
+  seq_len: 60
+  seed: 42
+  scaler_type: "minmax"       # "minmax" or "zscore"
+
+  # RL
+  ppo_steps: 200000
+  transaction_cost: 0.001
+  min_cash_buffer: 0.02
+  initial_cash: 10000
+
+  # CEEMDAN defaults (used when enabled)
+  ceemdan:
+    max_imf: 6
+    trials: 100
+    noise_width: 0.05
+    energy_min: 0.02
+    corr_min: 0.10
+
+profiles:
+  ceemd_cnnlstm_rl_ta_macro:
+    use_ceemdan: 1
+    include_macro: 1
+    model_type: "cnn_lstm"
+
+  ceemd_cnnlstm_rl_ta:
+    use_ceemdan: 1
+    include_macro: 0
+    model_type: "cnn_lstm"
+
+  cnnlstm_rl_ta:
+    use_ceemdan: 0
+    include_macro: 0
+    model_type: "cnn_lstm"
+
+  lstm_rl_ta:
+    use_ceemdan: 0
+    include_macro: 0
+    model_type: "lstm_only"

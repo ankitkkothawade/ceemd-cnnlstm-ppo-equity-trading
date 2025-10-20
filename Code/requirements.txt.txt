@@ -1,0 +1,11 @@
+numpy
+pandas
+yfinance
+pandas-datareader
+PyYAML
+scikit-learn
+tensorflow
+torch
+gymnasium
+stable-baselines3
+EMD-signal
