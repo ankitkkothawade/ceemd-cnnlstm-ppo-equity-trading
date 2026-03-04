@@ -1,165 +1,137 @@
-
-# 📈 CEEMD–CNN–LSTM–PPO: A Hybrid Deep Learning Framework for Equity Forecasting and Trading  
-
-This repository accompanies the dissertation  
-**“A CEEMD–CNN–LSTM–PPO Pipeline for Daily Equity Portfolios”**  
-submitted in partial fulfilment of the requirements for the *MSc in Advanced Computer Science with Data Science* at the *University of Strathclyde* (August 2025).  
-
-The work investigates the integration of **frequency-aware signal decomposition**, **deep learning sequence modelling**, and **reinforcement learning** for realistic, cost-aware portfolio management.  
-All experiments are fully reproducible and designed for deployment-grade transparency.
+# 📈 CEEMD–CNN–LSTM–PPO: Frequency-Aware Equity Forecasting & Portfolio Management  
+**Hybrid Deep Learning Pipeline for Financial Time-Series Forecasting**  
+*CEEMDAN + CNN–LSTM + PPO Portfolio Optimisation*
 
 ---
 
-## 🧩 Overview
+## 🚀 Project Highlights
 
-Financial time series are noisy, non-stationary, and regime-dependent.  
-This project develops and evaluates an end-to-end pipeline that integrates:
-
-| Component | Purpose | Methodology |
-|------------|----------|-------------|
-| **CEEMDAN** | Adaptive denoising and multi-scale signal decomposition | Complete Ensemble Empirical Mode Decomposition with Adaptive Noise |
-| **CNN–LSTM Forecaster** | Short-term price prediction | Convolutional feature extraction + gated temporal memory |
-| **Reinforcement Learning Agent (PPO)** | Dynamic portfolio allocation under frictions | Proximal Policy Optimization via Stable-Baselines3 |
-| **Ablation Framework** | Empirical validation | Controlled toggling of decomposition, macro, and technical features |
+- Built a hybrid ML pipeline combining **CEEMDAN signal decomposition, CNN–LSTM forecasting, and PPO reinforcement learning**
+- Designed a **walk-forward evaluation framework** to prevent look-ahead bias in financial time-series forecasting
+- Integrated **macro + technical features** across 5 equities using 24 years of historical data
+- Converted predictive signals into **portfolio allocation decisions** using reinforcement learning under realistic trading frictions
+- Demonstrated improved **forecast stability and risk-adjusted portfolio performance**
 
 ---
 
-## 🎯 Research Objectives
+## 🏗 System Architecture
 
-1. Evaluate whether **CEEMDAN-based decomposition** enhances deep learning forecast accuracy.  
-2. Quantify the contribution of **macroeconomic and technical indicators** to daily predictive performance.  
-3. Compare **CNN–LSTM hybrids** against LSTM-only and non-decomposed baselines.  
-4. Examine whether **reinforcement learning** improves portfolio returns under realistic costs.  
-5. Ensure **reproducibility**, **leakage-safe design**, and **walk-forward evaluation** across multiple market regimes.
+![System Architecture](docs/architecture.png)
+
+**Flow:**
+
+Market Data  
+↓  
+CEEMDAN Decomposition  
+↓  
+Feature Engineering  
+↓  
+CNN–LSTM Forecast Model  
+↓  
+Predicted Returns  
+↓  
+PPO Agent  
+↓  
+Portfolio Allocation  
 
 ---
 
-## 📂 Repository Structure
+# ⚡ TL;DR
 
-```
+## Problem
+Daily equity prices are **noisy, non-stationary and regime-dependent**.  
+Traditional models struggle to convert short-term predictive edges into robust portfolio returns.
 
+## Solution
+Decompose prices into intrinsic mode functions with **CEEMDAN** to isolate meaningful signals, forecast with a **CNN–LSTM hybrid**, and optimise allocations with a **PPO trading agent** under realistic transaction costs.
+
+## Impact
+The hybrid system improved:
+- Forecast accuracy (**lower RMSE / MAE**)
+- Risk-adjusted returns (**higher Sharpe ratio, lower drawdowns**)
+- Robustness across **multiple market regimes**
+
+This project was delivered as part of my **MSc dissertation at the University of Strathclyde (Aug 2025)** and emphasises:
+- reproducible research  
+- business-relevant evaluation  
+- production-ready transparency  
+
+---
+
+## 📈 Example Output (Quick Demo)
+
+Forecast vs actual (example):
+
+![Prediction vs Actual](docs/prediction_plot.png)
+
+Portfolio equity curve (example):
+
+![Equity Curve](docs/equity_curve.png)
+
+---
+
+# 🧠 Why This Matters
+
+Financial time series are notoriously **noisy and non-stationary**.  
+A model that works during one regime often fails in another.
+
+Furthermore, **predictive accuracy alone does not translate into trading profits** when transaction costs and risk constraints are considered.
+
+This repository tackles these challenges by integrating signal processing, deep learning, and reinforcement learning.
+
+---
+
+## Denoising
+Using **Complete Ensemble Empirical Mode Decomposition with Adaptive Noise (CEEMDAN)** to extract multi-scale components that retain meaningful price dynamics while filtering out noise.
+
+## Forecasting
+Building a **CNN–LSTM architecture** that captures:
+- local patterns via **convolutions**
+- long-term dependencies via **recurrent memory**
+
+## Decision Making
+Training a **PPO reinforcement learning agent** to dynamically adjust portfolio weights while accounting for:
+- transaction costs  
+- slippage  
+- portfolio constraints  
+
+## Validation
+Ensuring reliability with:
+- walk-forward evaluation  
+- ablation studies  
+- paired bootstrap confidence intervals  
+- leakage-safe pipelines  
+
+---
+
+# 🔬 Key Findings
+
+### Decomposition improves stability
+Models trained on **CEEMDAN-derived components** show smoother error curves and lower **RMSE / MAE**.
+
+### Macro and technical features matter
+Adding macro indicators (**VIX, CPI, unemployment**) and technical indicators improves directional accuracy and risk-adjusted performance.
+
+### Reinforcement learning closes the loop
+**PPO converts predictive signals into profitable trading decisions** under realistic trading costs.
+
+### Reproducibility matters
+Strict seed control and leakage safeguards ensure **repeatable experimental results**.
+
+---
+
+# 📂 Project Structure
+
+```text
 ceemd-cnnlstm-ppo/
 │
-├── preprocess.py             # Data acquisition, CEEMDAN decomposition, feature generation
-├── forecast.py               # CNN–LSTM model training and forecasting
-├── rl_train.py               # PPO trading agent and environment
-├── ablation_runner.py        # Orchestration of all experimental profiles
-├── seed_utils.py             # Deterministic seeding and reproducibility utilities
+├── preprocess.py        # Data acquisition, CEEMDAN decomposition, feature generation
+├── forecast.py          # CNN–LSTM model training and forecasting
+├── rl_train.py          # PPO trading agent and environment
+├── ablation_runner.py   # Orchestrates experimental profiles
+├── seed_utils.py        # Deterministic seeding utilities
 │
-├── requirements.txt          # Python dependencies
-├── How to Run.txt            # Minimal execution instructions
-│
-├── Report.docx               # Full dissertation report
-└── README.md                 # Project documentation
-
-````
-
----
-
-## 🧮 Experimental Design
-
-### Dataset
-- **Universe:** AAPL, AMZN, TSLA, JPM, MSFT  
-- **Horizon:** 2000 – 2024 (Train 2000–2022  |  Test 2023–2024)  
-- **Data Sources:** Yahoo Finance (prices) and FRED (macro indicators)  
-- **Frequency:** Daily; aligned “as-of” macro updates to avoid look-ahead bias  
-
-### Features
-- CEEMD-derived Intrinsic Mode Functions (filtered by energy ≥ 0.02, |corr| ≥ 0.10)  
-- Compact technical indicators (RSI, MACD, SMA/EMA, Bollinger Bands, ATR, volatility metrics)  
-- Macroeconomic variables (VIX, CPI YoY, Unemployment, Output Gap proxy)  
-- Leakage safeguards: release-lag alignment, warm-up trimming, train-only scaling  
-
-### Forecasting Model
-- **Architecture:** Conv1D(32, kernel 3) → MaxPool → LSTM(64) → Dense(1)  
-- **Loss:** MSE  |  Optimizer:** Adam (1e-4)  |  Regularization:** Dropout (0.2)  
-- **Training protocol:** Early Stopping (patience 8), ReduceLROnPlateau (factor 0.5), walk-forward validation  
-
-### Reinforcement Learning
-- **Algorithm:** PPO (MlpPolicy, Stable-Baselines3)  
-- **Action space:** Continuous target weights [0, 1] per asset  
-- **Risk constraints:** Cash buffer 2 %, Per-asset cap 40 %, Rebalance threshold 0.5 %  
-- **Transaction costs:** 10 bps per leg + 5 bps slippage  
-- **Reward:** Daily ΔNAV (net of costs)  
-- **Metrics:** Sharpe Ratio, Max Drawdown, Cumulative Return, Turnover  
-
-### Ablation Profiles
-| Profile | Decomposition | Technical | Macro | RL |
-|----------|---------------|-----------|-------|----|
-| `ceemd_cnnlstm_rl_ta_macro` | ✅ | ✅ | ✅ | ✅ |
-| `ceemd_cnnlstm_rl_ta` | ✅ | ✅ | ✖ | ✅ |
-| `cnnlstm_rl_ta` | ✖ | ✅ | ✖ | ✅ |
-| `lstm_rl_ta` | ✖ | ✅ | ✖ | ✅ |
-
----
-
-## 📊 Evaluation Framework
-
-**Forecasting metrics:** RMSE  |  MAE  |  Directional Accuracy (DA)  
-**Trading metrics:** Net Asset Value, Sharpe Ratio, Max Drawdown, Calmar Ratio  
-
-Performance is assessed across market regimes (bullish, sideways, volatile) using paired bootstrap confidence intervals for statistical significance.
-
----
-
-## 📈 Key Findings
-
-- **CEEMD decomposition** improved forecast stability and reduced RMSE/MAE across all assets.  
-- **Macro-augmented hybrids** enhanced risk-adjusted performance by reducing drawdowns.  
-- **PPO trading agents** converted modest predictive edges into statistically significant portfolio gains.  
-- **Walk-forward reproducibility** confirmed the robustness of each experimental variant.  
-- **Live paper-trading** validated that back-tested dynamics generalize under real-time execution.  
-
----
-
-## 🧰 Software Environment
-
-| Category | Tool / Library |
-|-----------|----------------|
-| **Core** | Python 3.9 + |
-| **Data Handling** | NumPy, Pandas, yFinance, pandas-datareader |
-| **Modeling** | TensorFlow, PyTorch |
-| **Signal Processing** | EMD-signal (CEEMDAN implementation) |
-| **Reinforcement Learning** | Gymnasium, Stable-Baselines3 |
-| **Utilities** | PyYAML, scikit-learn |
-| **Reproducibility** | Fixed seeds (`seed_utils.py`), JSON configs, audit logs |
-
-Install dependencies:
-```bash
-pip install -r requirements.txt
-````
-
----
-
-## ▶️ Execution
-
-```bash
-# Run full experiment suite
-python ablation_runner.py
-```
-
-All intermediate artifacts (scalers, checkpoints, metrics, logs) are automatically versioned for audit and replication.
-
----
-
-
-## 🧭 Research Impact
-
-This work demonstrates that **frequency-aware hybrid models**, when coupled with **cost-aware reinforcement learning**, can close the gap between **forecasting** and **decision-making** in financial markets.
-It contributes a reproducible, extensible framework for academic research and applied quantitative finance.
-
----
-
-## 👤 Author
-
-**Ankit Kothawade**
-*MSc Advanced Computer Science with Data Science*
-University of Strathclyde
-
-📧 [ankitkkothawade@gmail.com](mailto:ankitkkothawade@gmail.com)
-🔗 [linkedin.com/in/ankit-kothawade](https://www.linkedin.com/in/ankit-kothawade)
-💻 [github.com/ankitkothawade](https://github.com/ankitkothawade)
-
-> “Bridging signal decomposition, deep learning, and reinforcement learning for transparent, reproducible financial AI.”
-
----
+├── requirements.txt     # Python dependencies
+├── How to Run.txt       # Minimal execution instructions
+├── Report.docx          # Full dissertation report
+└── README.md            # Project documentation
